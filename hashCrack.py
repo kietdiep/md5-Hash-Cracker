@@ -35,9 +35,13 @@ def retrieveFile(hashfile):
     openfile.close()
     return(hashDictTemp)
 
+# take in inputs of hashDict and split md5 salt and hash password
+# in this case we know that the md5 will be the first 3 characters of the hashDict value so we can just create a substring of everything after
+# Additionally we can create a substring of everything after the first 12 because we will know the salt after just extracting one of the strings
+
 def splitSaltnPass(hashDict):
-    pass
+    for team in range(len(hashDict)):
+        teamName = hashDict[team].key()
 
 
 hashDict = retrieveFile(hashfile)
-print(len(hashDict))
