@@ -6,9 +6,6 @@ import sys        # may not need
 class ChadNKietOnCrack:
     b64="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
-    def string_tohex(insert params here):
-        pass
-
     def get_intermediate(self, password, salt, magic):
         inter = password + magic + salt
         alternate = hashlib.md5(password + salt + password).hexdigest()
@@ -28,9 +25,8 @@ class ChadNKietOnCrack:
         
         return hashlib.md5(inter).hexdigest()
         
-        pass
 
-    def loop(password, salt, h):
+    def loop(self, password, salt, h):
         for i in range (1000):
             tmp =""
             if i % 2:
@@ -54,15 +50,15 @@ class ChadNKietOnCrack:
         return fin
 
 
-    def get_bytes(self, bytes):
+    def get_bytes(self, inter):
         temp = b""
         idx = [11, 4, 10, 5, 3, 9, 15, 2, 8, 14, 1, 7, 13, 0, 6, 12]
         for i in idx:
-            temp += bytes[x:x+1]
+            temp += inter[x:x+1]
 
-        return bytes
+        return temp
 
-    def hash(genPass, salt):
+    def hash(self, genPass, salt):
         md5 = b"$1$"
 
         hashPass = self.get_intermediate(genPass, salt, md5)
