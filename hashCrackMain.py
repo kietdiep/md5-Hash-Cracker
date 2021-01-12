@@ -11,6 +11,11 @@ class ChadNKietOnCrack:
 
     def get_intermediate(self, password, salt, magic):
         inter = password + magic + salt
+        alternate = hashlib.md5(password + salt + password).hexdigest()
+        pass_len = len(password)
+
+        
+        
         pass
 
     def loop(password, salt, h):
@@ -45,9 +50,41 @@ class ChadNKietOnCrack:
 
         return bytes
 
-    def hash(insert params here):
-        pass
+    def hash(genPass, salt):
+        md5 = b"$1$"
+
+        hashPass = self.get_intermediate(genPass, salt, md5)
+
+        hashPass = self.get_bytes(genPass)
+
+        hashPass = int(binascii.hexlify(hashPass), 16)
+
+        encoded = ""
+        for _ in range(22):
+            encoded += self.b64[hashPass % 64]
+            hashPass 
+        
     
+    def generateCombo(self, password, salt):
+        LowAlpha = "abcdefghijklmnopqrsuvwxyz"
+        tempStr = ""
+        for char1 in LowAlpha:
+            tempStr.append(char1)
+            for char2 in LowAlpha:
+                tempStr.append(char2)
+                for char3 in LowAlpha:
+                    tempStr.append(char3)
+                    for char4 in LowAlpha:
+                        tempStr.append(char4)
+                        for char5 in LowAlpha:
+                            tempStr.append(char5)
+                            for char6 in LowAlpha:
+                                tempStr.append(char6)
+                                etempStr = tempStr.encode()
+                                if hash(etempStr, salt) == password:
+                                    return tempStr 
+                                
+
 
 
 
@@ -57,14 +94,8 @@ if __name__ == "__main__":
         exit()
 
     inst = ChadNKietOnCrack()
-    password, salt = sys.argv[1], sys.argv[2]
+    password, salt = sys.argv[1], sys.argv[2].encode()
 
-    ChadNKietMd5 = inst.hash(password, salt)            # subject to change
+    ChadNKietMd5 = inst.generateCombo(password, salt)            # subject to change hash -> generate combo
 
     print(ChadNKietMd5)
-
-
-
-
-
-
