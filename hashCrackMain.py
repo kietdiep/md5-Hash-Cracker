@@ -9,7 +9,8 @@ class ChadNKietOnCrack:
     def string_tohex(insert params here):
         pass
 
-    def get_intermediate(insert params here):
+    def get_intermediate(self, password, salt, magic):
+        inter = password + magic + salt
         pass
 
     def loop(password, salt, h):
@@ -36,8 +37,13 @@ class ChadNKietOnCrack:
         return fin
 
 
-    def get_bytes(insert params here):
-        pass
+    def get_bytes(self, bytes):
+        temp = b""
+        idx = [11, 4, 10, 5, 3, 9, 15, 2, 8, 14, 1, 7, 13, 0, 6, 12]
+        for i in idx:
+            temp += bytes[x:x+1]
+
+        return bytes
 
     def hash(insert params here):
         pass
