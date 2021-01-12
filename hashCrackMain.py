@@ -76,7 +76,7 @@ class ChadNKietOnCrack:
         
     
     def generateCombo(self, password, salt):
-        LowAlpha = "abcdefghijklmnopqrsuvwxyz"
+        LowAlpha = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","v","w","x","y","z"]
         tempStr = ""
         for char1 in LowAlpha:
             tempStr += char1
@@ -90,6 +90,7 @@ class ChadNKietOnCrack:
                             tempStr += char5
                             for char6 in LowAlpha:
                                 tempStr += char6
+                                print(tempStr)
                                 etempStr = tempStr.encode()
                                 if self.hash(etempStr, salt) == password:
                                     return tempStr 
