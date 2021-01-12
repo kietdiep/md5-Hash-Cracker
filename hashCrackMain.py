@@ -51,13 +51,13 @@ class ChadNKietOnCrack:
         return fin
 
 
-    def get_bytes(self, bytes):
+    def get_bytes(self, inter):
         temp = b""
         idx = [11, 4, 10, 5, 3, 9, 15, 2, 8, 14, 1, 7, 13, 0, 6, 12]
         for i in idx:
-            temp += bytes[i:i+1]
+            temp += inter[i:i+1]
 
-        return bytes
+        return temp
 
     def hash(self,genPass, salt):
         md5 = b"$1$"
@@ -73,21 +73,33 @@ class ChadNKietOnCrack:
             encoded += self.b64[hashPass % 64]
             hashPass //= 64
         
-        return md5.decode() + salt.decode() + '$' + encoded
+        return encoded[0:6]
         
     
     def generateCombo(self, password, salt):
         LowAlpha = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","v","w","x","y","z"]
         tempStr = ""
         comb = combinations(LowAlpha, 6)
-        for i in list(comb):
-            for j in i:
-                tempStr += j
-            etempStr = tempStr.encode()
-            if self.hash(etempStr, salt) == password:
-                return tempStr
-            print(tempStr)
-            tempStr = ""
+        lowalph = "abcdefghijklmnopqrstuvwxyz"
+        for i in lowalph:
+            for j in lowalph:
+                for k in lowalph:   
+                    for l in lowalph:
+                        for m in lowalph:
+                            for n in lowalph:
+                                tempStr = i+j+k+l+m+n
+                                print(tempStr)
+                                etempStr = tempStr.encode()
+                                if self.hash(etempStr, salt) == password:
+                                    return tempStr
+        # for i in comb:#list(comb):
+        #     for j in i:
+        #         tempStr += j
+        #     etempStr = tempStr.encode()
+        #     if self.hash(etempStr, salt) == password:
+        #         return tempStr
+        #     print(tempStr)
+        #     tempStr = ""
 
 
                                 
