@@ -1,6 +1,7 @@
 import binascii
 import hashlib
-import sys        # may not need
+import sys       
+from itertools import combinations
 
 
 class ChadNKietOnCrack:
@@ -78,22 +79,18 @@ class ChadNKietOnCrack:
     def generateCombo(self, password, salt):
         LowAlpha = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","v","w","x","y","z"]
         tempStr = ""
-        for char1 in LowAlpha:
-            tempStr += char1
-            for char2 in LowAlpha:
-                tempStr += char2
-                for char3 in LowAlpha:
-                    tempStr += char3
-                    for char4 in LowAlpha:
-                        tempStr += char4
-                        for char5 in LowAlpha:
-                            tempStr += char5
-                            for char6 in LowAlpha:
-                                tempStr += char6
-                                print(tempStr)
-                                etempStr = tempStr.encode()
-                                if self.hash(etempStr, salt) == password:
-                                    return tempStr 
+        comb = combinations(LowAlpha, 6)
+        for i in list(comb):
+            for j in i:
+                tempStr += j
+            etempStr = tempStr.encode()
+            if self.hash(etempStr, salt) == password:
+                return tempStr
+            print(tempStr)
+            tempStr = ""
+
+
+                                
                                 
 
 
