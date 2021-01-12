@@ -14,7 +14,19 @@ class ChadNKietOnCrack:
         alternate = hashlib.md5(password + salt + password).hexdigest()
         pass_len = len(password)
 
+        xalt = binascii.unhexlify(alternate)
+        for i in range (pass_len, 0, -16):
+            inter +=  xalt[0:16 if i > 16 else i]
+
+        while pass_len:
+            if pass_len & 1:
+                inter += chr(0).encode()
+            else:
+                inter += password[0:1]
+            
+            pass_len >>= 1
         
+        return hashlib.md5(inter).hexdigest()
         
         pass
 
