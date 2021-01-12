@@ -50,7 +50,9 @@ class ChadNKietOnCrack:
         encoded = ""
         for _ in range(22):
             encoded += self.b64[hashPass % 64]
-            hashPass 
+            hashPass //= 64
+        
+        return md5.decode() + salt.decode() + '$' + encoded
         
     
     def generateCombo(self, password, salt):
