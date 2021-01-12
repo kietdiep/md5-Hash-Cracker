@@ -26,7 +26,7 @@ class ChadNKietOnCrack:
         return hashlib.md5(inter).hexdigest()
         
 
-    def loop(self, password, salt, h):
+    def loop(self,password, salt, h):
         for i in range (1000):
             tmp =""
             if i % 2:
@@ -50,15 +50,15 @@ class ChadNKietOnCrack:
         return fin
 
 
-    def get_bytes(self, inter):
+    def get_bytes(self, bytes):
         temp = b""
         idx = [11, 4, 10, 5, 3, 9, 15, 2, 8, 14, 1, 7, 13, 0, 6, 12]
         for i in idx:
-            temp += inter[x:x+1]
+            temp += bytes[i:i+1]
 
-        return temp
+        return bytes
 
-    def hash(self, genPass, salt):
+    def hash(self,genPass, salt):
         md5 = b"$1$"
 
         hashPass = self.get_intermediate(genPass, salt, md5)
@@ -79,19 +79,19 @@ class ChadNKietOnCrack:
         LowAlpha = "abcdefghijklmnopqrsuvwxyz"
         tempStr = ""
         for char1 in LowAlpha:
-            tempStr.append(char1)
+            tempStr += char1
             for char2 in LowAlpha:
-                tempStr.append(char2)
+                tempStr += char2
                 for char3 in LowAlpha:
-                    tempStr.append(char3)
+                    tempStr += char3
                     for char4 in LowAlpha:
-                        tempStr.append(char4)
+                        tempStr += char4
                         for char5 in LowAlpha:
-                            tempStr.append(char5)
+                            tempStr += char5
                             for char6 in LowAlpha:
-                                tempStr.append(char6)
+                                tempStr += char6
                                 etempStr = tempStr.encode()
-                                if hash(etempStr, salt) == password:
+                                if self.hash(etempStr, salt) == password:
                                     return tempStr 
                                 
 
