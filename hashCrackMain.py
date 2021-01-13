@@ -105,4 +105,4 @@ if __name__ == "__main__":
     password, salt = sys.argv[1], sys.argv[2].encode()
     ChadNKietMd5 = inst.generateCombo(password, salt)            # subject to change hash -> generate combo
 
-    print(ChadNKietMd5)
+    print("This is the password: " + ChadNKietMd5 )
