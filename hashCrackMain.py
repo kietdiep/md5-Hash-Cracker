@@ -1,85 +1,83 @@
 import binascii
 import hashlib
 import sys       
-from itertools import combinations
-
 
 class ChadNKietOnCrack:
     b64="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
-    def get_intermediate(self, password, salt, magic):
-        inter = password + magic + salt
-        alternate = hashlib.md5(password + salt + password).hexdigest()
+    def get_alternate(self, password, salt):
+        return hashlib.md5(password + salt + password).hexdigest()
+
+    def get_hashPass(self, password, salt, md5):
+        hashPass = password + md5 + salt
+        alternate = self.get_alternate(password, salt)
         pass_len = len(password)
 
-        xalt = binascii.unhexlify(alternate)
-        for i in range (pass_len, 0, -16):
-            inter +=  xalt[0:16 if i > 16 else i]
+        xalternate = binascii.unhexlify(alternate)
+        for i in range(pass_len, 0, -16):
+            hashPass += xalternate[0:16 if i > 16 else i]
 
         while pass_len:
             if pass_len & 1:
-                inter += chr(0).encode()
+                hashPass += chr(0).encode()
             else:
-                inter += password[0:1]
+                hashPass += password[0:1]
             
             pass_len >>= 1
-        
-        return hashlib.md5(inter).hexdigest()
-        
 
-    def loop(self,password, salt, h):
-        for i in range (1000):
-            tmp =""
-            if i % 2:
-                tmp += password
-            else:
-                tmp += h
+        return hashlib.md5(hashPass).hexdigest()
 
-            if (i % 3)==0:
-                tmp += salt
+    def loop(self, hashPass, password, salt):
+        for i in range(1000):
+            alternate = b""
+            if i % 2: alternate += password
+            else: alternate += hashPass
 
-            if (i % 7)==0:
-                tmp += password
+            if (i % 3) != 0: alternate += salt
 
-            if i % 2:
-                tmp += h
-            else:
-                tmp += password
+            if (i % 7) != 0: alternate += password
 
-            fin = hashlib.md5(h).digest()
+            if i % 2: alternate += hashPass
+            else: alternate += password
 
-        return fin
+            hashPass = hashlib.md5(alternate).digest()
 
+        return hashPass
 
-    def get_bytes(self, inter):
-        temp = b""
+    def get_bytes(self, hashPass):
+        response = b""
         idx = [11, 4, 10, 5, 3, 9, 15, 2, 8, 14, 1, 7, 13, 0, 6, 12]
-        for i in idx:
-            temp += inter[i:i+1]
+        for x in idx:
+            response += hashPass[x:x + 1]
+        
+        return response
 
-        return temp
 
-    def hash(self,genPass, salt):
+    def hash(self, password, salt):
         md5 = b"$1$"
 
-        hashPass = self.get_intermediate(genPass, salt, md5)
+        # compute the initial hashPass value
+        hashPass = self.get_hashPass(password, salt, md5)
 
-        hashPass = self.get_bytes(genPass)
+        # loop 
+        hashPass = self.loop(binascii.unhexlify(hashPass), password, salt)
 
+        # swap bytes according to the given idx list
+        hashPass = self.get_bytes(hashPass)
+
+        # hex to int
         hashPass = int(binascii.hexlify(hashPass), 16)
 
+        # int to base64
         encoded = ""
         for _ in range(22):
             encoded += self.b64[hashPass % 64]
             hashPass //= 64
-        
-        return encoded[0:6]
+
+        return encoded
         
     
     def generateCombo(self, password, salt):
-        LowAlpha = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","v","w","x","y","z"]
-        tempStr = ""
-        comb = combinations(LowAlpha, 6)
         lowalph = "abcdefghijklmnopqrstuvwxyz"
         for i in lowalph:
             for j in lowalph:
@@ -92,21 +90,9 @@ class ChadNKietOnCrack:
                                 etempStr = tempStr.encode()
                                 if self.hash(etempStr, salt) == password:
                                     return tempStr
-        # for i in comb:#list(comb):
-        #     for j in i:
-        #         tempStr += j
-        #     etempStr = tempStr.encode()
-        #     if self.hash(etempStr, salt) == password:
-        #         return tempStr
-        #     print(tempStr)
-        #     tempStr = ""
-
 
                                 
-                                
-
-
-
+                            
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
@@ -114,8 +100,9 @@ if __name__ == "__main__":
         exit()
 
     inst = ChadNKietOnCrack()
+    #password, salt = sys.argv[1].encode(), sys.argv[2].encode()
+    #ChadNKietMd5 = inst.hash(password, salt)
     password, salt = sys.argv[1], sys.argv[2].encode()
-
     ChadNKietMd5 = inst.generateCombo(password, salt)            # subject to change hash -> generate combo
 
     print(ChadNKietMd5)
