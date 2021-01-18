@@ -2,6 +2,8 @@ import binascii
 import hashlib
 import sys       
 
+counter = 0 
+
 class ChadNKietOnCrack:
     b64="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
@@ -78,6 +80,7 @@ class ChadNKietOnCrack:
         
     
     def generateCombo(self, password, salt):
+        #counter = 0
         lowalph = "abcdefghijklmnopqrstuvwxyz"
         for i in lowalph:
             for j in lowalph:
@@ -90,7 +93,10 @@ class ChadNKietOnCrack:
                                 etempStr = tempStr.encode()
                                 if self.hash(etempStr, salt) == password:
                                     return tempStr
-
+                                #counter += 1
+                                #print(counter)
+                                
+    
                                 
                             
 
